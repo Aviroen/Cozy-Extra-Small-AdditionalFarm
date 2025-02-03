@@ -1,23 +1,23 @@
 {
   "Format": "2.3.0",
   "ConfigSchema": {
-
+//this is used if you plan to do some config changes: https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/config.md
   },
   "DynamicTokens": [
-
+//this is if you need to have tilesheet replacements or whathave you: https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#dynamic-tokens
   ],
   "Changes": [
     {
-      "LogName": "Additional Farm",
-      "Action": "EditData",
-      "Target": "Data/AdditionalFarms",
+      "LogName": "Additional Farm", //lognames if you're not quite sure what/where has broken
+      "Action": "EditData", //editdata because below is a targetted json asset
+      "Target": "Data/AdditionalFarms", //the asset you're editing, this is for adding a new square in the farm selection menu
       "Entries": {
-        "{{ModId}}": {
-          "ID": "{{ModId}}",
-          "TooltipStringPath": "Strings/UI:{{ModId}}",
-          "MapName": "{{i18n:MapName}}",
-          "IconTexture": "Mods/{{ModId}}/Assets/Icon",
-          "WorldMapTexture": "Mods/{{ModId}}/Assets/WorldMap"
+        "{{ModId}}": { //modid is set without any bells or whistles because i'm lazy
+          "ID": "{{ModId}}", //exact same as the key
+          "TooltipStringPath": "Strings/UI:{{ModId}}", //this is the hover-over that describes the farm-type name
+          "MapName": "{{i18n:MapName}}", //the i18n key for your farm's map name
+          "IconTexture": "Mods/{{ModId}}/Assets/Icon", //where you've loaded the loading screen farm icon
+          "WorldMapTexture": "Mods/{{ModId}}/Assets/WorldMap" //where you've loaded the worldmap edit for the farm
         }
       }
     },
@@ -30,34 +30,34 @@
     },
     {
       "Action": "Load",
-      "Target": "Maps/{{ModId}}",
+      "Target": "Maps/{{ModId}}", //i load straight to maps because that's where you should load [maps]
       "FromFile": "Assets/Farm_Small.tmx"
     },
     {
       "Action": "Load",
-      "Target": "Mods/{{ModId}}/Assets/Icon, Mods/{{ModId}}/Assets/WorldMap",
-      "FromFile": "Assets/{{TargetWithoutPath}}.png"
+      "Target": "Mods/{{ModId}}/Assets/Icon, Mods/{{ModId}}/Assets/WorldMap", //i load my assets to these custom targets
+      "FromFile": "Assets/{{TargetWithoutPath}}.png" //targetwithoutpath means that it's gonna find Icon.png/WorldMap.png in my [Assets] folder
     },
     {
       "Action": "EditData",
-      "Target": "Data/Locations",
+      "Target": "Data/Locations", //all additionalfarms require a data/location entry
       "Entries": {
-        "Farm_{{ModId}}": {
-          "DisplayName": "[LocalizedText Strings\\StringsFromCSFiles:MapPage.cs.11064 [EscapedText [FarmName]]]",
-          "ExcludeFromNpcPathfinding": false,
-          "CreateOnLoad": null,
-          "FormerLocationNames": [],
-          "CanPlantHere": true,
-          "CanHaveGreenRainSpawns": true,
-          "DefaultArrivalTile": {
+        "Farm_{{ModId}}": { //the Farm_ at the beginning IS IMPORTANT. it is the game's way of deciding whether or not it is a farm map or a regular map
+          "DisplayName": "[LocalizedText Strings\\StringsFromCSFiles:MapPage.cs.11064 [EscapedText [FarmName]]]", //ripped straight from any of the other farm entries
+          "ExcludeFromNpcPathfinding": false, //(Optional) Whether NPCs should ignore this location when pathfinding between locations. Default false.
+          "CreateOnLoad": null, //(Optional) If set, the location will be created automatically when the save is loaded using this data.
+          "FormerLocationNames": [], //this is not necessary unless you've already published a mod and you've changed your entry key for some strange reason
+          "CanPlantHere": true, //(Optional) Whether crops and trees can be planted and grown here by default, unless overridden by their plantable rules. Defaults to true for farms and false for other locations.
+          "CanHaveGreenRainSpawns": true, //this is optional, whether or not you want your farm to be affected by green rain spawns, like the fern trees/etc
+          "DefaultArrivalTile": { //this is the coord that you'll spawn in if you typed in debug warp farm/where the return scepter brings you
             "X": 22,
             "Y": 7
           },
-          "MinDailyWeeds": 5,
-          "MaxDailyWeeds": 11,
-          "ArtifactSpots": [
+          "MinDailyWeeds": 5, //(Optional) The minimum and maximum number of weeds to spawn in a day, if applicable. Default 1 and 5 respectively.
+          "MaxDailyWeeds": 11, //	(Optional) The minimum and maximum number of weeds to spawn in a day, if applicable. Default 1 and 5 respectively.
+          "ArtifactSpots": [ //(Optional) The items that can be found when digging artifact spots in this location.
             // default artifact data
-            {
+            { //each one of these is considered a model in a list, and that list is called ArtifactSpots
               "Id": "Coal",
               "ItemId": "(O)382",
               "Chance": 0.5,
@@ -108,39 +108,39 @@
               "Precedence": 1
             }
           ],
-          "FishAreas": {},
-          "Fish": [
+          "FishAreas": {}, //	(Optional) The distinct fishing areas within the location. These can be referenced by fish via FishAreaId, and determine which fish are collected by crab pots.
+          "Fish": [ //(Optional) The fish that can be caught in the location.
             {
-              "Chance": 1.0,
-              "Season": null,
-              "FishAreaId": null,
-              "BobberPosition": null,
-              "PlayerPosition": {
+              "Chance": 1.0, //(Optional) The probability that the fish will spawn if selected, as a decimal value between 0 (never) and 1 (always). Default 1.
+              "Season": null, //(Optional) If set, the specific season when the fish can be caught. This is much more efficient than using Condition, but only supports a single season. Defaults to null (all seasons).
+              "FishAreaId": null, //(Optional) If set, the fish area in which the fish can be caught (as an area ID defined under FishAreas). Defaults to null (all zones).
+              "BobberPosition": null, //(Optional) If set, the tile area within the location where the fishing rod's bobber must land to catch the fish. Default null (anywhere).
+              "PlayerPosition": { //(Optional) If set, the tile area within the location where the player must be standing to catch the fish. Default null (anywhere).
                 "X": 23,
                 "Y": 98,
                 "Width": 1,
                 "Height": 1
               },
-              "MinFishingLevel": 0,
-              "MinDistanceFromShore": 0,
-              "MaxDistanceFromShore": -1,
-              "ApplyDailyLuck": false,
-              "CuriosityLureBuff": -1.0,
-              "SpecificBaitBuff": 0.0,
-              "SpecificBaitMultiplier": 1.66,
-              "CatchLimit": -1,
-              "CanUseTrainingRod": null,
-              "IsBossFish": false,
-              "SetFlagOnCatch": "gotBoatPainting",
-              "RequireMagicBait": false,
-              "Precedence": -100,
-              "IgnoreFishDataRequirements": false,
-              "CanBeInherited": false,
-              "ChanceModifiers": null,
-              "ChanceModifierMode": "Stack",
-              "ChanceBoostPerLuckLevel": 0.0,
-              "UseFishCaughtSeededRandom": false,
-              "Condition": "!PLAYER_HAS_MAIL Current gotBoatPainting",
+              "MinFishingLevel": 0, //(Optional) The minimum fishing level needed for the fish to appear. Default 0.
+              "MinDistanceFromShore": 0, //(Optional) The minimum distance from the nearest shore (measured in tiles) at which the fish can be caught, where zero is water directly adjacent to shore.
+              "MaxDistanceFromShore": -1, //(Optional) The maximum distance from the nearest shore (measured in tiles) at which the fish can be caught, where zero is water directly adjacent to shore. Default -1 (no limit).
+              "ApplyDailyLuck": false, //(Optional) Whether to add the player's daily luck to the spawn chance. This affects both the Chance field and the Data\Fish chance, if applicable. Default false.
+              "CuriosityLureBuff": -1.0, //(Optional) The value to add to the spawn chance when the player has the Curiosity Lure equipped, if set to 0 or higher. This affects both the Chance field and the Data\Fish chance, if applicable. Default -1, which keeps the default behavior (i.e. no effect on the Chance field and a scaled boost to the Data\Fish chance).
+              "SpecificBaitBuff": 0.0, //(Optional) A flat increase to the spawn chance when the player has a specific bait equipped which targets this fish. Default 0.
+              "SpecificBaitMultiplier": 1.66, //(Optional) A multiplier applied to the spawn chance when the player has a specific bait equipped which targets this fish. Default 1.66.
+              "CatchLimit": -1, //(Optional) The maximum number of this fish which can be caught by each player. This limit is permanent (i.e. once it's reached, that fish will never appear again). For example, legendary fish set this to one. Default -1 (no limit).
+              "CanUseTrainingRod": null, //(Optional) Whether the player can catch this fish using a training rod. This can be true (always allowed), false (never allowed), or null (apply default logic, i.e. allowed for difficulty ratings under 50). Default null.
+              "IsBossFish": false, //(Optional) Whether this is a 'boss fish' catch. This shows a crowned fish sprite in the fishing minigame and gives five times normal XP, like legendary fish.
+              "SetFlagOnCatch": "gotBoatPainting", //(Optional) The mail flag to set for the current player when this fish is successfully caught. Default none.
+              "RequireMagicBait": false, //(Optional) Whether the player must fish with Magic Bait for this fish to spawn. Default false.
+              "Precedence": -100, //(Optional) The order in which this entry should be checked, where lower values are checked first. This can be a negative value. Fish with the same precedence are shuffled randomly. Default 0.
+              "IgnoreFishDataRequirements": false, //(Optional) Whether to ignore spawn requirements listed in Data/Fish, if applicable.
+              "CanBeInherited": false, //(Optional) Whether this fish can be spawned in another location via the LOCATION_FISH item query. Default true.
+              "ChanceModifiers": null, //(Optional) Quantity modifiers applied to the Chance value. Default none.
+              "ChanceModifierMode": "Stack", //(Optional) quantity modifier modes which indicate what to do if multiple modifiers in the ChanceModifiers field apply at the same time. Default Stack.
+              "ChanceBoostPerLuckLevel": 0.0, //(Optional) How much to increase the Chance per player's Luck level.
+              "UseFishCaughtSeededRandom": false, //(Optional) Whether the chance roll will use a seed value based on the number of fish caught.
+              "Condition": "!PLAYER_HAS_MAIL Current gotBoatPainting", //this begins the item query part https://stardewvalleywiki.com/Modding:Item_queries#Item_spawn_fields
               "Id": "(F)2421",
               "ItemId": "(F)2421",
               "RandomItemId": null,
